@@ -11,7 +11,7 @@ In essence, the default configuration of Win2K8R2 does not have the right versio
     Tls12
     PS C:\Users\Administrator>
 
-The binary installers are included in this repo.
+URLs to the binary installers are below.
 
 Additionally, there is no obvious single script with the installation order for the scripts; some rely on others to be run first, others are entirely but confusingly independent.
 
