@@ -38,6 +38,7 @@ Finally, read the section in the script which configures the firewall to automat
 6. Set-ExecutionPolicy -ExecutionPolicy Bypass
 7. Enter 'y' to confirm
 6. ./dg\_install\_ms3.ps1
+7. Go and make a cup of tea
 7. Shutdown and snapshot the VM
 
 N.B. during installation you are likely to see at least 2 errors along the lines of "JAVA_HOME environment variable not set".
