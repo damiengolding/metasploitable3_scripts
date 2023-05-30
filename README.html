@@ -293,16 +293,19 @@ img {
 <body>
 <h1>Metasploitable 3 configuration for Windows 2008 R2</h1>
 <h2>Pre-amble</h2>
-<p>This small package was written due to consistent failures in the packer/vagrant/chef build from Rapid 7.</p>
-<p>In essence, the default configuration of Win2K8R2 does not have the right versions of .Net or WMF (Powershell).  The correct version of Powershell is important, because v 2.0 will only ever use it's own version of .Net, so calls to [net.servicepointmanager]::securityprotocol tls12 will always fail. To confirm, run [enum]::GetNames([Net.SecurityProtocolType]) from the Powershell prompt and you should see something like the following output (but including Tls12):</p>
-<p>PS C:\Users\Administrator&gt; [enum]::GetNames([Net.SecurityProtocolType])
+<p>This small package was written due to problems I experienced with the packer/vagrant/chef build process.</p>
+<p>In essence, the default configuration of Win2K8R2 does not have the right versions of .Net or WMF (Powershell), and a number of the scripts have now obsolete download URLs.  The correct version of Powershell is important, because v 2.0 will only ever use it's own version of .Net, so calls to [net.servicepointmanager]::securityprotocol tls12 will always fail. To confirm, after .Net 4.6 and WMF 3.0 installation, run [enum]::GetNames([Net.SecurityProtocolType]) from the Powershell prompt and you should see something like the following output (but including Tls12):</p>
+<pre><code>PS C:\Users\Administrator&gt;[enum]::GetNames([Net.SecurityProtocolType])
 Ssl3
 Tls
 Tls11
 Tls12
-PS C:\Users\Administrator&gt;</p>
+PS C:\Users\Administrator&gt;
+</code></pre>
+
+<p>The binary installers are included in this repo.</p>
 <p>Additionally, there is no obvious single script with the installation order for the scripts; some rely on others to be run first, others are entirely but confusingly independent.</p>
-<p>The following process script dg_install_ms3.ps1 is the end result of some experimentation and should automate the process of configuring an out-of-the-box Win2K8R2 VM for Metasploitable 3.</p>
+<p>The included process script dg_install_ms3.ps1 is the end result of some experimentation and should automate the process of configuring an out-of-the-box Win2K8R2 VM for Metasploitable 3.</p>
 <p>Finally, read the section in the script which configures the firewall to automatically enable/disable the firewall.</p>
 <h2>In the VM</h2>
 <ol>
@@ -317,18 +320,20 @@ Change the password policy in the VM to disable enforcement of password complexi
 </li>
 <li>Create the administrator user vagrant : vagrant on the VM (this is required, for instance, for gem installation which looks for .gemrc in C:\Users\vagrant)</li>
 <li>Login as vagrant : vagrant</li>
-<li>Copy this folder and the executable installers to the VM. Copy the sub-folder &quot;vagrant&quot; to the VM as &quot;C: vagrant&quot;</li>
-<li>From this folder, install .Net 4.6 (either the online installer DOT_NET_4.6_ONLINE_NDP46-KB3045560-Web.exe or the offline installer DOT_NET_4.6_OFFLINE_NDP46-KB3045557-x86-x64-AllOS-ENU.exe).</li>
+<li>Copy this folder to the VM. Copy the sub-folder &quot;vagrant&quot; to the VM as &quot;C:\vagrant&quot;</li>
+<li>Install .Net 4.6 (https://dotnet.microsoft.com/en-us/download/dotnet-framework/net46).</li>
 <li>{Restart}</li>
-<li>Install WMF 3.0 (WMF_3.0_Windows6.1-KB2506143-x64.msu).</li>
+<li>Install WMF 3.0 (https://www.microsoft.com/en-gb/download/details.aspx?id=34595).</li>
 <li>{Restart}</li>
-<li>[Optional] To obviate the problems I had with vcredist run the installer (vcredist_x64.exe) or take your chances with the script.</li>
+<li>[Optional] To obviate the problems I had with the vcredist installation script, download and run the installer (https://aka.ms/vs/17/release/vc_redist.x64.exe) or take your chances with the script.</li>
 <li>cd C:\vagrant</li>
 <li>Set-ExecutionPolicy -ExecutionPolicy Bypass</li>
 <li>Enter 'y' to confirm</li>
 <li>./dg_install_ms3.ps1</li>
-<li>Snapshot the VM</li>
+<li>Shutdown and snapshot the VM</li>
 </ol>
+<p>N.B. during installation you are likely to see at least 2 errors along the lines of &quot;JAVA_HOME environment variable not set&quot;.</p>
+<p>These can be safely ignored; the JAVA_HOME variable is in fact correctly set, and the error messages are emitted by startup scripts called before the environment variables are reloaded. The scripts work fine when the VM is restarted.</p>
 <p>Good luck!</p>
 
 </body>
