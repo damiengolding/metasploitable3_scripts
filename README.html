@@ -304,16 +304,25 @@ PS C:\Users\Administrator&gt;</p>
 <p>Additionally, there is no obvious single script with the installation order for the scripts; some rely on others to be run first, others are entirely but confusingly independent.</p>
 <p>The following process script dg_install_ms3.ps1 is the end result of some experimentation and should automate the process of configuring an out-of-the-box Win2K8R2 VM for Metasploitable 3.</p>
 <p>Finally, read the section in the script which configures the firewall to automatically enable/disable the firewall.</p>
-<p>First, copy this folder and the executable installers to the VM. Copy the sub-folder &quot;vagrant&quot; to the VM as &quot;C:\vagrant&quot;</p>
-<p>In the VM:</p>
+<h2>In the VM</h2>
 <ol>
-<li>There are several downloads prior to install, so make sure your VM is on a NAT or Bridged network.</li>
+<li>There are several downloads during installation, so make sure your VM is on a NAT or Bridged network and can access the internet.</li>
+<li>
+Change the password policy in the VM to disable enforcement of password complexity:
+<ol>
+<li>Click Start and select Run to open Run dialog box. Then type gpedit.msc and click OK to open Local Group Policy Editor.</li>
+<li>Expand Computer Configuration -&gt; Windows Settings -&gt; Security Settings -&gt; Account Policies -&gt; Password Policy.</li>
+<li>Double-click &quot;Password must meet complexity requirements&quot;. Change the setting to &quot;disabled&quot; and then click Apply to save changes.</li>
+</ol>
+</li>
+<li>Create the administrator user vagrant : vagrant on the VM (this is required, for instance, for gem installation which looks for .gemrc in C:\Users\vagrant)</li>
+<li>Login as vagrant : vagrant</li>
+<li>Copy this folder and the executable installers to the VM. Copy the sub-folder &quot;vagrant&quot; to the VM as &quot;C: vagrant&quot;</li>
 <li>From this folder, install .Net 4.6 (either the online installer DOT_NET_4.6_ONLINE_NDP46-KB3045560-Web.exe or the offline installer DOT_NET_4.6_OFFLINE_NDP46-KB3045557-x86-x64-AllOS-ENU.exe).</li>
 <li>{Restart}</li>
 <li>Install WMF 3.0 (WMF_3.0_Windows6.1-KB2506143-x64.msu).</li>
 <li>{Restart}</li>
 <li>[Optional] To obviate the problems I had with vcredist run the installer (vcredist_x64.exe) or take your chances with the script.</li>
-<li>[Optional] create the administrator user vagrant : vagrant on the VM (you can of course use your own admin account).</li>
 <li>cd C:\vagrant</li>
 <li>Set-ExecutionPolicy -ExecutionPolicy Bypass</li>
 <li>Enter 'y' to confirm</li>

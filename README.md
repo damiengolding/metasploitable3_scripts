@@ -17,17 +17,21 @@ The following process script dg\_install\_ms3.ps1 is the end result of some expe
 
 Finally, read the section in the script which configures the firewall to automatically enable/disable the firewall.
 
-First, copy this folder and the executable installers to the VM. Copy the sub-folder "vagrant" to the VM as "C:\vagrant"
+## In the VM
 
-In the VM:
-
-1. There are several downloads prior to install, so make sure your VM is on a NAT or Bridged network.
+1. There are several downloads during installation, so make sure your VM is on a NAT or Bridged network and can access the internet.
+2. Change the password policy in the VM to disable enforcement of password complexity:
+	1. Click Start and select Run to open Run dialog box. Then type gpedit.msc and click OK to open Local Group Policy Editor.
+	2. Expand Computer Configuration -> Windows Settings -> Security Settings -> Account Policies -> Password Policy.
+	3. Double-click "Password must meet complexity requirements". Change the setting to "disabled" and then click Apply to save changes.
+2. Create the administrator user vagrant : vagrant on the VM (this is required, for instance, for gem installation which looks for .gemrc in C:\Users\vagrant)
+3. Login as vagrant : vagrant
+4. Copy this folder and the executable installers to the VM. Copy the sub-folder "vagrant" to the VM as "C: vagrant"
 2. From this folder, install .Net 4.6 (either the online installer DOT\_NET\_4.6\_ONLINE\_NDP46-KB3045560-Web.exe or the offline installer DOT\_NET\_4.6\_OFFLINE\_NDP46-KB3045557-x86-x64-AllOS-ENU.exe).
 3. {Restart}
 3. Install WMF 3.0 (WMF\_3.0_Windows6.1-KB2506143-x64.msu).
 4. {Restart}
 4. [Optional] To obviate the problems I had with vcredist run the installer (vcredist\_x64.exe) or take your chances with the script.
-5. [Optional] create the administrator user vagrant : vagrant on the VM (you can of course use your own admin account).
 5. cd C:\vagrant
 6. Set-ExecutionPolicy -ExecutionPolicy Bypass
 7. Enter 'y' to confirm
